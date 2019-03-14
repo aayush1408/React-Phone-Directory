@@ -1,25 +1,46 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-class App extends Component {
+// Importing components
+import Header from "./components/Header";
+import Display from "./components/Display";
+import ToggleForm from "./components/ToggleForm";
+
+class App extends React.Component {
+
+  //intialize state
+  constructor() {
+    super();
+    this.state = {
+      phoneData: []
+    };
+  }
+
+  // get the data from form component 
+  getFormData = (name, phoneno) => {
+    const { phoneData } = this.state;
+    this.setState({
+      phoneData: [...phoneData, { name, phoneno }]
+    });
+  };
+
+
+  // delete the data
+  deleteData = name => {
+    const remainData = this.state.phoneData.filter(item => item.name !== name);
+    this.setState({
+      phoneData: [...remainData]
+    });
+  };
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Header title="Phone Directory" />
+        <ToggleForm getFormData={this.getFormData} />
+        <Display
+          phoneData={this.state.phoneData}
+          deleteData={this.deleteData}
+        />
       </div>
     );
   }
